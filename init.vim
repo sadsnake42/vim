@@ -58,8 +58,9 @@ augroup END
 call plug#begin('~/.config/nvim/plugged')
 
 "" ------------------=== MyPlugin ===----------------------
-Plug '/home/sad/projects/personal/televim'
 Plug 'segeljakt/vim-silicon'
+Plug 'jparise/vim-graphql'
+Plug 'rhysd/vim-grammarous'
 
 "" ------------------=== Colorscheme ===----------------------
 Plug 'morhetz/gruvbox'
@@ -67,9 +68,16 @@ Plug 'sjl/badwolf'
 Plug 'kristijanhusak/vim-carbon-now-sh'
 
 "" ------------------=== Git ===----------------------
+Plug 'jceb/vim-orgmode'
+Plug 'yazgoo/unicodemoji'
+Plug 'yasuhiroki/github-actions-yaml.vim'
+
+"" ------------------=== Git ===----------------------
 Plug 'Xuyuanp/nerdtree-git-plugin'  
 Plug 'rhysd/git-messenger.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'idanarye/vim-merginal'
+Plug 'tpope/vim-rhubarb'
 Plug 'ruanyl/vim-gh-line'
 
 "" ------------------=== File Navigation ===----------------------
@@ -94,10 +102,10 @@ Plug 'tpope/vim-surround'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-repeat'
 Plug 'mbbill/undotree'
+Plug 'kshenoy/vim-signature'
 
 "------------------=== Latex ===---------------------------------
 Plug 'lervag/vimtex'
-Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
 
 ""------------------=== Other ===---------------------------------
@@ -115,6 +123,8 @@ Plug 'kassio/neoterm'
 Plug 'rhysd/vim-clang-format'
 Plug 'jamessan/vim-gnupg'
 Plug 'voldikss/vim-translator'
+Plug 'tomlion/vim-solidity'
+Plug 'szw/vim-maximizer'
 
 " --- i3 ---
 Plug 'mboughaba/i3config.vim'
@@ -123,12 +133,14 @@ Plug 'mboughaba/i3config.vim'
 Plug 'vim-scripts/L9'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh \| UpdateRemotePlugins' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'florentc/vim-tla'
 
 """ --- Rust ---
 Plug 'uarun/vim-protobuf'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'rust-lang/rust.vim'
 Plug 'mattn/webapi-vim'
+Plug 'mhinz/vim-crates'
 
 """ --- Python ---
 Plug 'machakann/vim-highlightedyank'
@@ -353,13 +365,14 @@ au FileType rust map <silent> gi <Plug>(coc-implementation)
 au FileType rust map <silent> gr <Plug>(coc-references)
 
 au FileType rust map <leader> gr <Plug>(coc-rename)
-au FileType rust nmap <leader> -  :CocAction<CR>
+au FileType rust nmap <leader> -  <Plug>(coc-codeaction-selected)
 au FileType rust nmap <leader> gf  <Plug>(coc-fix-current)
 
 let g:enable_ycm_at_startup = 0
 
 au FileType rust nmap <F1>  :RustFmt<CR>
 au FileType rust nmap <F13> :AbortDispatch<CR>
+
 
 au FileType rust nmap <F7>  :Dispatch cargo build<CR>
 au FileType rust nmap <F19> :Dispatch cargo build --workspace<CR> 
@@ -382,6 +395,7 @@ au FileType rust nmap <F22> :GdbStep<CR>
 
 au FileType rust nmap <F11> :GdbContinue<CR>
 au FileType rust nmap <F23> :GdbUntil<CR>
+au FileType rust nmap <F12> :GdbFinish<CR>
 au FileType rust nmap <F12> :GdbFinish<CR>
 
 nmap <A-1> :NERDTreeFind<CR>
@@ -408,6 +422,9 @@ nmap <Leader>l :BLines<CR>
 nmap <Leader>t :BTags<CR>
 nmap <Leader>/ :Rg<Space>
 
+nmap <Leader>m :CocAction<CR>
+nmap <Leader>, :CocCommand<CR>
+
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
@@ -427,8 +444,9 @@ nmap <Leader>gp :Gpush<CR>
 nmap <Leader>gf :Gfetch<CR>
 nmap <Leader>gw :Gwrite<CR>
 nmap <Leader>gm <Plug>(git-messenger)
+nmap <A-f> :MaximizerToggle!<CR>
 
-let g:git_messenger_include_diff = "all"
+let g:git_messentalier_include_diff = "all"
 
 nnoremap Q @@
 map ; <Plug>(clever-f-repeat-forward)
@@ -455,6 +473,10 @@ autocmd Filetype tex setl updatetime=1
 let g:livepreview_previewer = 'zathura'
 set conceallevel=0
 let g:tex_conceal='abdmg'
+
+if has('nvim')
+  autocmd BufRead Cargo.toml call crates#toggle()
+endif
 
 " ============
 " GITHUB
@@ -483,6 +505,46 @@ let g:silicon = {
 
 let g:silicon['output'] = '~/Pictures/silicon/{time:%Y-%m-%d-%H%M%S}.png'
 let g:airline_theme='gruvbox'
-let g:python3_host_prog = '/usr/bin/python3.8'
+let g:python3_host_prog = '/usr/bin/python3.9'
 let g:translator_target_lang = "en"
 
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+inoremap <expr> <c-j> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'jira mine-ls',
+  \ 'reducer': { lines -> '[' . split(lines[0], ' ')[0][:-2] . '] ' }}))
+
+inoremap <expr> <c-e> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'jira mine-ls',
+  \ 'reducer': { lines -> '[' . split(lines[0], ' ')[0][:-2] . '] ' }}))
+
+function! s:cd_workspace(line)
+    execute "cd " . a:line
+    echomsg a:line
+endfunction
+
+function! s:change_crate()
+  call fzf#run(fzf#wrap({
+    \ 'dir': systemlist('git rev-parse --show-toplevel')[0],
+    \ 'prefix': 'sprout-',
+    \ 'source': '/home/q99/.cargo/bin/workspaces.sh',
+    \ 'sink': { line -> s:cd_workspace(split(line)[1]) }
+    \ }))
+endfunction
+
+nnoremap <silent> <a-w> :call <SID>change_crate()<CR>
+
+let g:airline#extensions#tabline#fnamemod = ':.'
+let g:airline#extensions#tabline#fnamecollapse = 0
+
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
+command! Slack :call slim#StartSlack()
