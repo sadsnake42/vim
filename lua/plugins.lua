@@ -1,85 +1,87 @@
 return require('packer').startup(function(use)
 	--------------------=== MyPlugin ===----------------------
-	use { 'segeljakt/vim-silicon' }
-	use { 'rhysd/vim-grammarous' }
+	use 'segeljakt/vim-silicon'
+	use 'rhysd/vim-grammarous'
 
 	------------------=== Colorscheme ===----------------------
-    use { "ellisonleao/gruvbox.nvim" }
-	use { 'xiyaowong/nvim-transparent' }
-	use { 'kristijanhusak/vim-carbon-now-sh' }
+    use "ellisonleao/gruvbox.nvim"
+	use 'xiyaowong/nvim-transparent'
+	use 'kristijanhusak/vim-carbon-now-sh'
 
 	------------------=== Git ===----------------------
-	use { 'jceb/vim-orgmode' }
-	use { 'yazgoo/unicodemoji' }
-	use { 'yasuhiroki/github-actions-yaml.vim' }
-	use { 'Xuyuanp/nerdtree-git-plugin'   }
-	use { 'rhysd/git-messenger.vim' }
-	use { 'tpope/vim-fugitive' }
-	use { 'idanarye/vim-merginal' }
-	use { 'tpope/vim-rhubarb' }
-	use { 'ruanyl/vim-gh-line' }
+	use 'jceb/vim-orgmode'
+	use 'yazgoo/unicodemoji'
+	use 'yasuhiroki/github-actions-yaml.vim'
+	use 'Xuyuanp/nerdtree-git-plugin'
+	use 'rhysd/git-messenger.vim'
+	use 'tpope/vim-fugitive'
+	use 'idanarye/vim-merginal'
+	use 'tpope/vim-rhubarb'
+	use 'ruanyl/vim-gh-line'
 
 	------------------=== File Navigation ===----------------------
-	use { 'junegunn/fzf' }
-	use { 'junegunn/fzf.vim' }
-	use { 'jesseleite/vim-agriculture' }
-	use { 'michaeljsmith/vim-indent-object' }
-	use { 'bronson/vim-visual-star-search' }
-	use { 'yuttie/comfortable-motion.vim' }
-	use { 'vim-ctrlspace/vim-ctrlspace' }
-	use { 'easymotion/vim-easymotion' }
-	use { 'thaerkh/vim-indentguides'  }
-	use { 'vim-scripts/BufOnly.vim' }
-	use { 'vim-scripts/FuzzyFinder' }
-	use { 'chaoren/vim-wordmotion' }
-	use { 'scrooloose/nerdtree' }
-	use { 'mhinz/vim-startify' }
-	use { 'rhysd/clever-f.vim' }
-	use { 'wellle/targets.vim' }
-	use { 'majutsushi/tagbar' }
-	use { 'tpope/vim-repeat' }
-	use { 'mbbill/undotree' }
-	use { 'kshenoy/vim-signature' }
+	use 'junegunn/fzf'
+	use 'junegunn/fzf.vim'
+	use 'jesseleite/vim-agriculture'
+	use 'michaeljsmith/vim-indent-object'
+	use 'bronson/vim-visual-star-search'
+	use 'yuttie/comfortable-motion.vim'
+	use 'vim-ctrlspace/vim-ctrlspace'
+	use 'easymotion/vim-easymotion'
+	use 'thaerkh/vim-indentguides'
+	use 'vim-scripts/BufOnly.vim'
+	use 'vim-scripts/FuzzyFinder'
+	use 'chaoren/vim-wordmotion'
+	use 'scrooloose/nerdtree'
+    -- Cow Startpage
+	-- use 'mhinz/vim-startify'
+	use 'rhysd/clever-f.vim'
+	use 'wellle/targets.vim'
+	use 'majutsushi/tagbar'
+	use 'tpope/vim-repeat'
+	use 'mbbill/undotree'
+	use 'kshenoy/vim-signature'
 
 	-- Latex ===---------------------------------
-	use { 'lervag/vimtex' }
-	use { 'honza/vim-snippets' }
+	use 'lervag/vimtex'
+	use 'honza/vim-snippets'
 
 	-- Other ===---------------------------------
-	use { 'elzr/vim-json' }
-	use { 'godlygeek/tabular' }
-	use { 'junegunn/vim-easy-align' }
-	use { 'luochen1990/rainbow' }
-	use { 'ryanoasis/vim-devicons' }
-	use { 'tpope/vim-dispatch' }
-	use { 'tpope/vim-surround' }
-	use { 'vim-airline/vim-airline' }
-	use { 'vim-airline/vim-airline-themes' }
-	use { 'vim-scripts/AnsiEsc.vim' }
-	use { 'kassio/neoterm' }
-	use { 'rhysd/vim-clang-format' }
-	use { 'jamessan/vim-gnupg' }
-	use { 'voldikss/vim-translator' }
-	use { 'tomlion/vim-solidity' }
-	use { 'szw/vim-maximizer' }
+	use 'elzr/vim-json'
+	use 'godlygeek/tabular'
+	use 'junegunn/vim-easy-align'
+	use 'luochen1990/rainbow'
+	use 'ryanoasis/vim-devicons'
+	use 'tpope/vim-dispatch'
+	use 'tpope/vim-surround'
+	use 'vim-airline/vim-airline'
+	use 'vim-airline/vim-airline-themes'
+    use 'ojroques/nvim-hardline'
+	use 'vim-scripts/AnsiEsc.vim'
+	use 'kassio/neoterm'
+	use 'rhysd/vim-clang-format'
+	use 'jamessan/vim-gnupg'
+	use 'voldikss/vim-translator'
+	use 'tomlion/vim-solidity'
+	use 'szw/vim-maximizer'
 	-- use { 'glts/vim-radical/' } TODO Fix me
 
 	-- i3 ---
-	use { 'mboughaba/i3config.vim' }
+	use 'mboughaba/i3config.vim'
 
 	-- Languages support ===-------------
-	use { 'vim-scripts/L9' }
-	use { 'sakhnik/nvim-gdb' }
+	use 'vim-scripts/L9'
+	use 'sakhnik/nvim-gdb'
 	-- use { 'neoclide/coc.nvim' }
-	use { 'florentc/vim-tla' }
+	use 'florentc/vim-tla'
 
 	--- Rust ---
-	use { 'uarun/vim-protobuf' }
-	use { 'uber/prototool' }
-	use { 'rust-lang/rust.vim' }
-	use { 'mattn/webapi-vim' }
-	use { 'mhinz/vim-crates' }
-    use { 'neovim/nvim-lspconfig' }
+	use 'uarun/vim-protobuf'
+	use 'uber/prototool'
+	use 'rust-lang/rust.vim'
+	use 'mattn/webapi-vim'
+	use 'mhinz/vim-crates'
+    use 'neovim/nvim-lspconfig'
 	use {
 		'simrat39/rust-tools.nvim',
 		requires = {
@@ -88,11 +90,24 @@ return require('packer').startup(function(use)
 		    'mfussenegger/nvim-dap'
 		}
 	}
+    use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+    use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+    use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+    use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
 	--- Python ---
-	use { 'machakann/vim-highlightedyank' }
-	use { 'tpope/vim-abolish' }
-	use { 'numirias/semshi' }
+	use 'machakann/vim-highlightedyank'
+	use 'tpope/vim-abolish'
+	use 'numirias/semshi'
+    
+    --- Start Page ---
+    --use {
+    --    "startup-nvim/startup.nvim",
+    --    requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+    --    config = function()
+    --      require"startup".setup()
+    --    end
+    --}
 
 	use {
 		'dgrbrady/nvim-docker',

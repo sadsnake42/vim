@@ -1,4 +1,5 @@
 local map = vim.api.nvim_set_keymap
+local vim_map = vim.keymap.set
 local au = vim.api.nvim_create_autocmd
 local default_opts = {noremap = true, silent = true}
 
@@ -54,3 +55,50 @@ map('n', '<Leader>/',  ':Rg<Space>',   default_opts)
 map('n', '<A-1>', ':NERDTreeFind<CR>', default_opts)
 map('n', '<A-2>', ':TagbarToggle<CR>', default_opts)
 
+vim_map('n', '[d', vim.diagnostic.goto_prev, default_opts)
+vim_map('n', '<space>e', vim.diagnostic.open_float, default_opts)
+vim_map('n', ']d', vim.diagnostic.goto_next, default_opts)
+vim_map('n', '<space>q', vim.diagnostic.setloclist, default_opts)
+
+local lsp_flags = {
+  debounce_text_changes = 150,
+}
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+-- See `:help vim.lsp.*` for documentation on any of the below functions
+local bufopts = { noremap=true, silent=true, buffer=bufnr }
+vim_map('n', 'gd', vim.lsp.buf.definition, bufopts)
+vim_map('n', 'K', vim.lsp.buf.hover, bufopts)
+vim_map('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+vim_map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+vim_map('n', '<space>wl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, bufopts)
+vim_map('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+vim_map('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+vim_map('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+vim_map('n', 'gr', vim.lsp.buf.references, bufopts)
+vim_map('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+
+require('lspconfig')['rust_analyzer'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    settings = {
+      ["rust-analyzer"] = {}
+    }
+}
+
+local rt = require("rust-tools")
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
