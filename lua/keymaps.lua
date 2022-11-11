@@ -19,12 +19,35 @@ map('n', '<A-h>', '<C-o>', default_opts)
 map('n', 'Q', '@@', default_opts)
 
 
+au({"Filetype toml"}, { callback = function()
+    local crates = require('crates')
+    local opts = { noremap = true, silent = true }
+
+    vim_map('n', '<leader>ct', crates.toggle, opts)
+    vim_map('n', '<leader>cr', crates.reload, opts)
+    vim_map('n', '<leader>cv', crates.show_versions_popup, opts)
+    vim_map('n', '<leader>cf', crates.show_features_popup, opts)
+    vim_map('n', '<leader>cd', crates.show_dependencies_popup, opts)
+    vim_map('n', '<leader>cu', crates.update_crate, opts)
+    vim_map('v', '<leader>cu', crates.update_crates, opts)
+    vim_map('n', '<leader>ca', crates.update_all_crates, opts)
+    vim_map('n', '<leader>cU', crates.upgrade_crate, opts)
+    vim_map('v', '<leader>cU', crates.upgrade_crates, opts)
+    vim_map('n', '<leader>cA', crates.upgrade_all_crates, opts)
+    vim_map('n', '<leader>cH', crates.open_homepage, opts)
+    vim_map('n', '<leader>cR', crates.open_repository, opts)
+    vim_map('n', '<leader>cD', crates.open_documentation, opts)
+    vim_map('n', '<leader>cC', crates.open_crates_io, opts)
+    vim_map('n', 'K',          crates.show_popup, opts)
+end })
+
 au({"FileType rust", "Filetype toml"}, { callback = function()
     map('n', '<F1>',  ':RustFmt<CR>',                                              default_opts)
     map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
     map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
     map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
     map('n', '<F8>',  ':Dispatch cargo test --workspace<CR>',                      default_opts)
+
 end })
 
 map('n', ';', '<Plug>(clever-f-repeat-forward)', default_opts)
@@ -93,6 +116,127 @@ require('lspconfig')['rust_analyzer'].setup{
 
 local rt = require("rust-tools")
 rt.setup({
+    tools = {
+        executor = require("rust-tools/executors").termopen,
+        on_initialized = nil,
+
+        reload_workspace_from_cargo_toml = true,
+
+        inlay_hints = {
+          auto = true,
+
+          only_current_line = false,
+          show_parameter_hints = true,
+          parameter_hints_prefix = "<- ",
+          other_hints_prefix = "=> ",
+          max_len_align = false,
+          max_len_align_padding = 1,
+
+          -- padding from the right if right_align is true
+          right_align_padding = 7,
+
+          -- The color of the hints
+          highlight = "Comment",
+        },
+
+        -- options same as lsp hover / vim.lsp.util.open_floating_preview()
+        hover_actions = {
+
+          -- the border that is used for the hover window
+          -- see vim.api.nvim_open_win()
+          border = {
+            { "╭", "FloatBorder" },
+            { "─", "FloatBorder" },
+            { "╮", "FloatBorder" },
+            { "│", "FloatBorder" },
+            { "╯", "FloatBorder" },
+            { "─", "FloatBorder" },
+            { "╰", "FloatBorder" },
+            { "│", "FloatBorder" },
+          },
+
+          -- whether the hover action window gets automatically focused
+          -- default: false
+          auto_focus = false,
+        },
+
+        -- settings for showing the crate graph based on graphviz and the dot
+        -- command
+        crate_graph = {
+          -- Backend used for displaying the graph
+          -- see: https://graphviz.org/docs/outputs/
+          -- default: x11
+          backend = "x11",
+          -- where to store the output, nil for no output stored (relative
+          -- path from pwd)
+          -- default: nil
+          output = nil,
+          -- true for all crates.io and external crates, false only the local
+          -- crates
+          -- default: true
+          full = true,
+
+          -- List of backends found on: https://graphviz.org/docs/outputs/
+          -- Is used for input validation and autocompletion
+          -- Last updated: 2021-08-26
+          enabled_graphviz_backends = {
+            "bmp",
+            "cgimage",
+            "canon",
+            "dot",
+            "gv",
+            "xdot",
+            "xdot1.2",
+            "xdot1.4",
+            "eps",
+            "exr",
+            "fig",
+            "gd",
+            "gd2",
+            "gif",
+            "gtk",
+            "ico",
+            "cmap",
+            "ismap",
+            "imap",
+            "cmapx",
+            "imap_np",
+            "cmapx_np",
+            "jpg",
+            "jpeg",
+            "jpe",
+            "jp2",
+            "json",
+            "json0",
+            "dot_json",
+            "xdot_json",
+            "pdf",
+            "pic",
+            "pct",
+            "pict",
+            "plain",
+            "plain-ext",
+            "png",
+            "pov",
+            "ps",
+            "ps2",
+            "psd",
+            "sgi",
+            "svg",
+            "svgz",
+            "tga",
+            "tiff",
+            "tif",
+            "tk",
+            "vml",
+            "vmlz",
+            "wbmp",
+            "webp",
+            "xlib",
+            "x11",
+          },
+        },
+  },
   server = {
     on_attach = function(_, bufnr)
       -- Hover actions
@@ -102,3 +246,4 @@ rt.setup({
     end,
   },
 })
+

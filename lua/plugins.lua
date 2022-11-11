@@ -7,6 +7,8 @@ return require('packer').startup(function(use)
     use "ellisonleao/gruvbox.nvim"
 	use 'xiyaowong/nvim-transparent'
 	use 'kristijanhusak/vim-carbon-now-sh'
+    use 'kvrohit/mellow.nvim'
+    use 'Tsuzat/NeoSolarized.nvim'
 
 	------------------=== Git ===----------------------
 	use 'jceb/vim-orgmode'
@@ -28,6 +30,10 @@ return require('packer').startup(function(use)
 	use 'yuttie/comfortable-motion.vim'
 	use 'vim-ctrlspace/vim-ctrlspace'
 	use 'easymotion/vim-easymotion'
+    use {
+      'phaazon/hop.nvim',
+      branch = 'v2', -- optional but strongly recommended
+    }
 	use 'thaerkh/vim-indentguides'
 	use 'vim-scripts/BufOnly.vim'
 	use 'vim-scripts/FuzzyFinder'
@@ -68,12 +74,14 @@ return require('packer').startup(function(use)
 
 	-- i3 ---
 	use 'mboughaba/i3config.vim'
+    use ({ 'mrjones2014/legendary.nvim', tag = 'v2.0.0' })
 
 	-- Languages support ===-------------
 	use 'vim-scripts/L9'
 	use 'sakhnik/nvim-gdb'
 	-- use { 'neoclide/coc.nvim' }
 	use 'florentc/vim-tla'
+    use 'GutenYe/json5.vim'
 
 	--- Rust ---
 	use 'uarun/vim-protobuf'
@@ -94,10 +102,15 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
     use 'L3MON4D3/LuaSnip' -- Snippets plugin
+    use {
+        'saecki/crates.nvim',
+        tag = 'v0.3.0',
+        requires = { 'nvim-lua/plenary.nvim' },
+    }
 
 	--- Python ---
 	use 'machakann/vim-highlightedyank'
-	use 'tpope/vim-abolish'
+    use 'arthurxavierx/vim-caser'
 	use 'numirias/semshi'
     
     --- Start Page ---
