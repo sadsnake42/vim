@@ -71,10 +71,10 @@ return require('packer').startup(function(use)
 	use 'tomlion/vim-solidity'
 	use 'szw/vim-maximizer'
 	-- use { 'glts/vim-radical/' } TODO Fix me
+    use 'samjwill/nvim-unception'
 
 	-- i3 ---
 	use 'mboughaba/i3config.vim'
-    use ({ 'mrjones2014/legendary.nvim', tag = 'v2.0.0' })
 
 	-- Languages support ===-------------
 	use 'vim-scripts/L9'
@@ -122,15 +122,11 @@ return require('packer').startup(function(use)
     --    end
     --}
 
-	use {
-		'dgrbrady/nvim-docker',
-		requires = {
-		  'nvim-lua/plenary.nvim',
-		  'MunifTanjim/nui.nvim'
-		},
-		rocks = '4O4/reactivex' -- ReactiveX Lua implementation
-	}
-
+    --use {
+    --  'dgrbrady/nvim-docker',
+    --  requires = {'nvim-lua/plenary.nvim', 'MunifTanjim/nui.nvim'},
+    --  rocks = '4O4/reactivex' -- ReactiveX Lua implementation
+    --}
 
 	use {
 		'pwntester/octo.nvim',
