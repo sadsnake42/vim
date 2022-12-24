@@ -11,9 +11,10 @@ opt.confirm=true
 opt.expandtab=true                                  -- expand tabs into spaces
 opt.exrc=true                                       -- enable usage of additional .vimrc files from working directory
 opt.filetype="on"                                   -- required
-opt.foldlevel=1
-opt.foldmethod="indent"
-opt.foldnestmax=0
+
+opt.foldmethod = 'expr'
+opt.foldexpr = 'nvim_treesitter#foldexpr()'
+
 opt.guifont="Fura Code Medium Nerd Font 20"
 opt.hidden=true
 opt.iminsert=0
@@ -31,7 +32,10 @@ opt.shiftwidth=4                               -- shift lines by 4 spaces
 opt.showmatch=true                                  -- shows matching part of bracket pairs (), [], {}
 opt.smarttab=true                                   -- set tabs for a shifttabs logic
 opt.spell=true
+
 opt.spelllang=en,ru
+opt.spellsuggest=best,9
+
 opt.tabstop=4                                  -- 4 whitespaces for tabs visual presentation
 opt.timeoutlen=1000 ttimeoutlen=0
 opt.ttyfast=true                                    -- terminal acceleration set autoindent                           -- indent when moving to the next line while writing code
@@ -388,3 +392,19 @@ require'cmp'.setup {
     { name = 'nvim_lsp' }
   }
 }
+
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "lua", "rust", "toml" },
+  auto_install = true,
+  highlight = {
+    enable = false,
+    additional_vim_regex_highlighting=false,
+  },
+  ident = { enable = true }, 
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
+  }
+}
+
