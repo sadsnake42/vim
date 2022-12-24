@@ -47,6 +47,7 @@ au({"FileType rust", "Filetype toml"}, { callback = function()
     map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
     map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
     map('n', '<F8>',  ':Dispatch cargo test --workspace<CR>',                      default_opts)
+    map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
 
 end })
 
