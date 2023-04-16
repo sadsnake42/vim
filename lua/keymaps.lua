@@ -46,7 +46,7 @@ au({"FileType rust", "Filetype toml"}, { callback = function()
     map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
     map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
     map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
-    map('n', '<F8>',  ':Dispatch cargo test --workspace<CR>',                      default_opts)
+    map('n', '<F8>',  ':Dispatch cargo nextest run<CR>',                      default_opts)
     map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
 
 end })
@@ -105,7 +105,7 @@ vim_map('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
 vim_map('n', '<space>rn', vim.lsp.buf.rename, bufopts)
 vim_map('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
 vim_map('n', 'gr', vim.lsp.buf.references, bufopts)
-vim_map('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+-- vim_map('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 
 require('lspconfig')['rust_analyzer'].setup{
     on_attach = on_attach,
@@ -113,6 +113,17 @@ require('lspconfig')['rust_analyzer'].setup{
     settings = {
       ["rust-analyzer"] = {}
     }
+}
+
+local dap = require('dap')
+dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
+dap.adapters.codelldb = {
+  type = 'server',
+  port = "13000",
+  executable = {
+    command = '/bin/codelldb',
+    args = {"--port", "13000"},
+  }
 }
 
 local rt = require("rust-tools")
@@ -246,5 +257,8 @@ rt.setup({
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
     end,
   },
+    dap = {
+        adapter = require("rust-tools.dap").get_codelldb_adapter('/bin/codelldb', '/usr/lib/liblldb.so'),
+      },
 })
 

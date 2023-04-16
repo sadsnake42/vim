@@ -4,14 +4,13 @@ return require('packer').startup(function(use)
 	use 'rhysd/vim-grammarous'
 
 	------------------=== Colorscheme ===----------------------
-    use "ellisonleao/gruvbox.nvim"
+	use "ellisonleao/gruvbox.nvim"
 	use 'xiyaowong/nvim-transparent'
 	use 'kristijanhusak/vim-carbon-now-sh'
-    use 'kvrohit/mellow.nvim'
-    use 'Tsuzat/NeoSolarized.nvim'
+	use 'kvrohit/mellow.nvim'
+	use 'Tsuzat/NeoSolarized.nvim'
 
 	------------------=== Git ===----------------------
-	use 'jceb/vim-orgmode'
 	use 'yazgoo/unicodemoji'
 	use 'yasuhiroki/github-actions-yaml.vim'
 	use 'Xuyuanp/nerdtree-git-plugin'
@@ -98,6 +97,7 @@ return require('packer').startup(function(use)
 		    'mfussenegger/nvim-dap'
 		}
 	}
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
@@ -112,7 +112,23 @@ return require('packer').startup(function(use)
 	use 'machakann/vim-highlightedyank'
     use 'arthurxavierx/vim-caser'
 	use 'numirias/semshi'
-    
+
+    use {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      event = "InsertEnter",
+      config = function()
+        require("copilot").setup({})
+      end,
+    }
+    use {
+      "zbirenbaum/copilot-cmp",
+      after = { "copilot.lua" },
+      config = function ()
+        require("copilot_cmp").setup()
+      end
+    }
+
     --- Start Page ---
     --use {
     --    "startup-nvim/startup.nvim",
@@ -127,6 +143,7 @@ return require('packer').startup(function(use)
     --  requires = {'nvim-lua/plenary.nvim', 'MunifTanjim/nui.nvim'},
     --  rocks = '4O4/reactivex' -- ReactiveX Lua implementation
     --}
+    --
 
 	use {
 		'pwntester/octo.nvim',
@@ -269,5 +286,17 @@ return require('packer').startup(function(use)
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
+    }
+    use {
+		'nvim-orgmode/orgmode', config = function()
+		require('orgmode').setup_ts_grammar()
+		require('orgmode').setup{}
+		end
+	}
+    use { 
+        'Bryley/neoai.nvim',
+        requires = {
+            "MunifTanjim/nui.nvim",
+        },
     }
 end)
