@@ -18,63 +18,75 @@ map('n', '<A-h>', '<C-o>', default_opts)
 
 map('n', 'Q', '@@', default_opts)
 
-
-au({"Filetype toml"}, { callback = function()
+au("Filetype", { pattern = "rust", callback = function()
     local crates = require('crates')
     local opts = { noremap = true, silent = true }
 
-    vim_map('n', '<leader>ct', crates.toggle, opts)
-    vim_map('n', '<leader>cr', crates.reload, opts)
-    vim_map('n', '<leader>cv', crates.show_versions_popup, opts)
-    vim_map('n', '<leader>cf', crates.show_features_popup, opts)
+    vim_map('n', '<leader>ct', crates.toggle,                  opts)
+    vim_map('n', '<leader>cr', crates.reload,                  opts)
+    vim_map('n', '<leader>cv', crates.show_versions_popup,     opts)
+    vim_map('n', '<leader>cf', crates.show_features_popup,     opts)
     vim_map('n', '<leader>cd', crates.show_dependencies_popup, opts)
-    vim_map('n', '<leader>cu', crates.update_crate, opts)
-    vim_map('v', '<leader>cu', crates.update_crates, opts)
-    vim_map('n', '<leader>ca', crates.update_all_crates, opts)
-    vim_map('n', '<leader>cU', crates.upgrade_crate, opts)
-    vim_map('v', '<leader>cU', crates.upgrade_crates, opts)
-    vim_map('n', '<leader>cA', crates.upgrade_all_crates, opts)
-    vim_map('n', '<leader>cH', crates.open_homepage, opts)
-    vim_map('n', '<leader>cR', crates.open_repository, opts)
-    vim_map('n', '<leader>cD', crates.open_documentation, opts)
-    vim_map('n', '<leader>cC', crates.open_crates_io, opts)
-    vim_map('n', 'K',          crates.show_popup, opts)
-end })
+    vim_map('n', '<leader>cu', crates.update_crate,            opts)
+    vim_map('v', '<leader>cu', crates.update_crates,           opts)
+    vim_map('n', '<leader>ca', crates.update_all_crates,       opts)
+    vim_map('n', '<leader>cU', crates.upgrade_crate,           opts)
+    vim_map('v', '<leader>cU', crates.upgrade_crates,          opts)
+    vim_map('n', '<leader>cA', crates.upgrade_all_crates,      opts)
+    vim_map('n', '<leader>cH', crates.open_homepage,           opts)
+    vim_map('n', '<leader>cR', crates.open_repository,         opts)
+    vim_map('n', '<leader>cD', crates.open_documentation,      opts)
+    vim_map('n', '<leader>cC', crates.open_crates_io,          opts)
+    vim_map('n', 'K',          crates.show_popup,              opts)
 
-au({"FileType rust", "Filetype toml"}, { callback = function()
     map('n', '<F1>',  ':RustFmt<CR>',                                              default_opts)
     map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
     map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
     map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
-    map('n', '<F8>',  ':Dispatch cargo nextest run<CR>',                      default_opts)
+    map('n', '<F8>',  ':Dispatch cargo nextest run --workspace<CR>',               default_opts)
     map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
-
 end })
 
-map('n', ';', '<Plug>(clever-f-repeat-forward)', default_opts)
-map('n', ',', '<Plug>(clever-f-repeat-back)',    default_opts)
 
-map('n', '/',         '<Plug>(easymotion-sn)',  default_opts)
-map('o', '/',         '<Plug>(easymotion-tn)',  default_opts)
-map('n', 'n',         '<Plug>(easymotion-next)', default_opts)
-map('n', 'N',         '<Plug>(easymotion-prev)', default_opts)
-map('n', '<Leader>n', '<Plug>(easymotion-bd-jk)',default_opts)
-map('n', '<Leader>w', '<Plug>(easymotion-bd-w)', default_opts)
 
-map('n', '<Leader>\'', ':Marks<CR>',   default_opts)
-map('n', '<Leader>;',  ':Buffers<CR>', default_opts)
-map('n', '<Leader>F',  ':Files<CR>',   default_opts)
-map('n', '<Leader>f',  ':GFiles<CR>',  default_opts)
+au("FileType", { 
+    pattern = "toml",
+    callback = function()
+        map('n', '<F1>',  ':RustFmt<CR>',                                              default_opts)
+        map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
+        map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
+        map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
+        map('n', '<F8>',  ':Dispatch cargo nextest run --workspace<CR>',                           default_opts)
+        map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
+end })
 
-map('n', '<Leader>L',  ':Lines<CR>',   default_opts)
-map('n', '<Leader>l',  ':BLines<CR>',  default_opts)
+map('n', ';', '<Plug>(clever-f-repeat-forward)',  default_opts)
+map('n', ',', '<Plug>(clever-f-repeat-back)',     default_opts)
 
-map('n', '<Leader>T',  ':Tags<CR>',    default_opts)
-map('n', '<Leader>c',  ':BCommits<CR>',default_opts)
-map('n', '<Leader>h',  ':History<CR>', default_opts)
+map('n', '/',         '<Plug>(easymotion-sn)',    default_opts)
+map('o', '/',         '<Plug>(easymotion-tn)',    default_opts)
+map('n', 'n',         '<Plug>(easymotion-next)',  default_opts)
+map('n', 'N',         '<Plug>(easymotion-prev)',  default_opts)
+map('n', '<Leader>n', '<Plug>(easymotion-bd-jk)', default_opts)
+map('n', '<Leader>w', '<Plug>(easymotion-bd-w)',  default_opts)
+
+local telescope_builtin = require('telescope.builtin')
+vim_map('n', '<Leader>f',  telescope_builtin.git_files, {})
+vim_map('n', '<Leader>F',  telescope_builtin.find_files, {})
+vim_map('n', '<Leader>;',  telescope_builtin.buffers, {})
+vim_map('n', '<Leader>\'', telescope_builtin.marks, {})
+vim_map('n', '<Leader>T',  telescope_builtin.tags, {})
+vim_map('n', '<Leader>h',  telescope_builtin.oldfiles, {})
+vim_map('n', '<Leader>l',  telescope_builtin.current_buffer_fuzzy_find, {})
+vim_map('n', '<Leader>r',  telescope_builtin.registers, {})
+vim_map('n', '<Leader>b',  telescope_builtin.git_branches, {})
+
+map('n', '<Leader>i', ":Octo issue list<CR>", {})
+map('n', '<Leader>p', ":Octo pr list<CR>", {})
 
 map('n', '<Leader>t',  ':BTags<CR>',   default_opts)
-map('n', '<Leader>/',  ':Rg<Space>',   default_opts)
+--map('n', '<Leader>/',  ':Rg<Space>',   default_opts)
+vim_map('n', '<Leader>/', telescope_builtin.live_grep, {})
 
 map('n', '<A-1>', ':NERDTreeFind<CR>', default_opts)
 map('n', '<A-2>', ':TagbarToggle<CR>', default_opts)
@@ -101,11 +113,13 @@ vim_map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
 vim_map('n', '<space>wl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, bufopts)
-vim_map('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-vim_map('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+
+vim_map('n', '<A-d>', vim.lsp.buf.type_definition, bufopts)
+vim_map('n', '<A-r>', vim.lsp.buf.rename, bufopts)
 vim_map('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-vim_map('n', 'gr', vim.lsp.buf.references, bufopts)
+
 -- vim_map('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+vim_map('n', 'gr', telescope_builtin.lsp_references, {})
 
 require('lspconfig')['rust_analyzer'].setup{
     on_attach = on_attach,
@@ -252,9 +266,9 @@ rt.setup({
   server = {
     on_attach = function(_, bufnr)
       -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<A-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
       -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      vim.keymap.set("n", "<A-a>", rt.code_action_group.code_action_group, { buffer = bufnr })
     end,
   },
     dap = {
@@ -262,3 +276,50 @@ rt.setup({
       },
 })
 
+local previewers = require("telescope.previewers")
+local builtin = require("telescope.builtin")
+
+local delta_bcommits = previewers.new_termopen_previewer({
+	get_command = function(entry)
+		return {
+			"git",
+			"-c",
+			"core.pager=delta",
+			"-c",
+			"delta.side-by-side=false",
+			"diff",
+			entry.value .. "^!",
+			"--",
+			entry.current_file,
+		}
+	end,
+})
+
+local delta = previewers.new_termopen_previewer({
+	get_command = function(entry)
+		return { "git", "-c", "core.pager=delta", "-c", "delta.side-by-side=false", "diff", entry.value .. "^!" }
+	end,
+})
+
+Delta_git_commits = function(opts)
+	opts = opts or {}
+	opts.previewer = {
+		delta,
+		previewers.git_commit_message.new(opts),
+		previewers.git_commit_diff_as_was.new(opts),
+	}
+	builtin.git_commits(opts)
+end
+
+Delta_git_bcommits = function(opts)
+	opts = opts or {}
+	opts.previewer = {
+		delta_bcommits,
+		previewers.git_commit_message.new(opts),
+		previewers.git_commit_diff_as_was.new(opts),
+	}
+	builtin.git_bcommits(opts)
+end
+
+vim_map("n", '<Leader>c', "<cmd>lua Delta_git_bcommits()<CR>", default_opts)
+-- vim_map('n', '<Leader>c',  telescope_builtin.git_bcommits, {})

@@ -2,5 +2,7 @@
 -- Импорт модулей lua
 -----------------------------------------------------------
 require('plugins')
-require('settings') 
+
+require('settings')
+
 require('keymaps')

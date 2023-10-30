@@ -1,5 +1,6 @@
 return require('packer').startup(function(use)
 	--------------------=== MyPlugin ===----------------------
+    use 'modocache/move.vim'
 	use 'segeljakt/vim-silicon'
 	use 'rhysd/vim-grammarous'
 
@@ -9,6 +10,7 @@ return require('packer').startup(function(use)
 	use 'kristijanhusak/vim-carbon-now-sh'
 	use 'kvrohit/mellow.nvim'
 	use 'Tsuzat/NeoSolarized.nvim'
+    use 'nyngwang/nvimgelion'
 
 	------------------=== Git ===----------------------
 	use 'yazgoo/unicodemoji'
@@ -46,6 +48,7 @@ return require('packer').startup(function(use)
 	use 'tpope/vim-repeat'
 	use 'mbbill/undotree'
 	use 'kshenoy/vim-signature'
+    use "kelly-lin/ranger.nvim"
 
 	-- Latex ===---------------------------------
 	use 'lervag/vimtex'
@@ -104,7 +107,6 @@ return require('packer').startup(function(use)
     use 'L3MON4D3/LuaSnip' -- Snippets plugin
     use {
         'saecki/crates.nvim',
-        tag = 'v0.3.0',
         requires = { 'nvim-lua/plenary.nvim' },
     }
 
@@ -112,22 +114,23 @@ return require('packer').startup(function(use)
 	use 'machakann/vim-highlightedyank'
     use 'arthurxavierx/vim-caser'
 	use 'numirias/semshi'
+    use 'hkupty/iron.nvim'
 
-    use {
-      "zbirenbaum/copilot.lua",
-      cmd = "Copilot",
-      event = "InsertEnter",
-      config = function()
-        require("copilot").setup({})
-      end,
-    }
-    use {
-      "zbirenbaum/copilot-cmp",
-      after = { "copilot.lua" },
-      config = function ()
-        require("copilot_cmp").setup()
-      end
-    }
+    --use {
+    --  "zbirenbaum/copilot.lua",
+    --  cmd = "Copilot",
+    --  event = "InsertEnter",
+    --  config = function()
+    --    require("copilot").setup({})
+    --  end,
+    --}
+    --use {
+    --  "zbirenbaum/copilot-cmp",
+    --  after = { "copilot.lua" },
+    --  config = function ()
+    --    require("copilot_cmp").setup()
+    --  end
+    --}
 
     --- Start Page ---
     --use {
@@ -148,9 +151,9 @@ return require('packer').startup(function(use)
 	use {
 		'pwntester/octo.nvim',
 		requires = {
-		'nvim-lua/plenary.nvim',
-		'nvim-telescope/telescope.nvim',
-		'kyazdani42/nvim-web-devicons',
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            'kyazdani42/nvim-web-devicons',
 		},
 		config = function ()
 		require"octo".setup({
@@ -288,15 +291,26 @@ return require('packer').startup(function(use)
         run = ':TSUpdate'
     }
     use {
-		'nvim-orgmode/orgmode', config = function()
-		require('orgmode').setup_ts_grammar()
-		require('orgmode').setup{}
-		end
-	}
+        'nvim-orgmode/orgmode', config = function()
+        require('orgmode').setup_ts_grammar()
+        require('orgmode').setup{}
+        end
+    }
     use { 
         'Bryley/neoai.nvim',
         requires = {
             "MunifTanjim/nui.nvim",
         },
     }
+    use {
+      "whleucka/reverb.nvim",
+      event = "BufReadPre",
+    }
+    use 'iden3/vim-circom-syntax'
+    use 'eandrju/cellular-automaton.nvim' 
+    use {
+        "williamboman/mason.nvim"
+    }
+    --use 'TabbyML/vim-tabby'
 end)
+

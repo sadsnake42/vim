@@ -32,6 +32,7 @@ opt.shiftwidth=4                               -- shift lines by 4 spaces
 opt.showmatch=true                                  -- shows matching part of bracket pairs (), [], {}
 opt.smarttab=true                                   -- set tabs for a shifttabs logic
 opt.spell=true
+opt.termguicolors=true
 
 opt.spelllang=en,ru
 opt.spellsuggest=best,9
@@ -41,7 +42,13 @@ opt.timeoutlen=1000 ttimeoutlen=0
 opt.ttyfast=true                                    -- terminal acceleration set autoindent                           -- indent when moving to the next line while writing code
 opt.undofile=true
 
+g.vimtex_view_method = 'zathura'
+--g.vimtex_compiler_method = 'xelatex'
+
 cmd([[
+    syntax enable
+    filetype plugin indent on
+
 	set noswapfile
 	set nobackup
 	set nocompatible
@@ -49,6 +56,11 @@ cmd([[
 	set nolist
 	set nowrap
 	set t_Co=256
+
+    hi diffAdded ctermfg=188 ctermbg=64 cterm=bold guifg=#50FA7B guibg=NONE gui=bold
+    hi DiffAdd ctermfg=188 ctermbg=64 cterm=bold guifg=#50FA7B guibg=NONE gui=bold
+    hi diffRemoved ctermfg=88 ctermbg=NONE cterm=NONE guifg=#FA5057 guibg=NONE gui=NONE
+    hi DiffRemove ctermfg=88 ctermbg=NONE cterm=NONE guifg=#FA5057 guibg=NONE gui=NONE
 ]])
 
 
@@ -94,7 +106,10 @@ require("gruvbox").setup({
   dim_inactive = false,
   transparent_mode = false,
 })
-vim.cmd([[colorscheme gruvbox]])
+require'nvim-treesitter.configs'.setup {
+  highlight = { enable = true }
+}
+--vim.cmd([[colorscheme gruvbox]])
 
 require("transparent").setup({
   groups = { -- table: default groups
@@ -129,7 +144,7 @@ var('rustfmt_command',  "/home/q99/.rustup/toolchains/nightly-x86_64-unknown-lin
 
 var('webdevicons_enable_nerdtree', '1')
 
-var('LanguageClient_serverCommands', '{ \'rust\': [\'rust-analyzer\'] }')
+var('LanguageClient_serverCommands', '{ \'rust\': [\'/home/q99/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin\'] }')
 
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
@@ -155,26 +170,13 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 end
-require('lspconfig')['rust_analyzer'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    settings = {
-      ["rust-analyzer"] = {}
-    }
-}
+require('lspconfig').move_analyzer.setup{}
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
-
-local servers = { 'rust_analyzer' }
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    capabilities = capabilities,
-  }
-end
 
 local luasnip = require 'luasnip'
 local cmp = require 'cmp'
@@ -222,6 +224,7 @@ cmp.setup {
 require('hardline').setup {}
 require'lspconfig'.rust_analyzer.setup({
     on_attach=on_attach,
+    flags = lsp_flags,
     settings = {
         ["rust-analyzer"] = {
             imports = {
@@ -241,6 +244,15 @@ require'lspconfig'.rust_analyzer.setup({
         }
     }
 })
+require('lspconfig').ruff_lsp.setup {
+  on_attach = on_attach,
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
+    }
+  }
+}
 
 require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
 require('crates').setup {
@@ -493,6 +505,13 @@ require('orgmode').setup({
 })
 
 require("neoai").setup({
+    models = {
+        {
+            name = "openai",
+            model = "gpt-4",
+            params = nil,
+        },
+    },
     prompts = {
         context_prompt = function(context)
             return "Providing context for future "
@@ -509,13 +528,110 @@ require("neoai").setup({
             prompt = function ()
                 return [[
                     Using the following git diff generate a consise and
-                    clear git convential-commit message, with a short title summary
-                    that is 75 characters or less:
+                    clear  message using "Conventional Commits 1.0.0" spec, with a short title summary
+                    that is 75 characters or less; Ignore cargo-version changes: 
                 ]] .. vim.fn.system("git diff --cached")
             end,
             modes = { "n" },
             strip_function = nil,
         },
+        {
+            name = "textify",
+            key = "<leader>as",
+            desc = "fix text with AI",
+            use_context = true,
+            prompt = [[
+                Please rewrite the text to make it more readable, clear,
+                concise, and fix any grammatical, punctuation, or spelling
+                errors
+            ]],
+            modes = { "v" },
+            strip_function = nil,
+        },
     },
 })
 
+require('telescope').setup({
+  defaults = {
+    layout_strategy = "vertical",
+    layout_config = {
+        vertical = { width = 0.5 }
+    },
+  },
+})
+
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+end
+
+local iron = require("iron.core")
+iron.setup {
+  config = {
+    -- Whether a repl should be discarded or not
+    scratch_repl = true,
+    -- Your repl definitions come here
+    repl_definition = {
+      sh = {
+        -- Can be a table or a function that
+        -- returns a table (see below)
+        command = {"zsh"}
+      }
+    },
+    -- How the repl window will be displayed
+    -- See below for more information
+    repl_open_cmd = require('iron.view').bottom(40),
+  },
+  -- Iron doesn't set keymaps by default anymore.
+  -- You can set them here or manually add keymaps to the functions in iron.core
+  keymaps = {
+    send_motion = "<space>sc",
+    visual_send = "<space>sc",
+    send_file = "<space>sf",
+    send_line = "<space>sl",
+    send_mark = "<space>sm",
+    mark_motion = "<space>mc",
+    mark_visual = "<space>mc",
+    remove_mark = "<space>md",
+    cr = "<space>s<cr>",
+    interrupt = "<space>s<space>",
+    exit = "<space>sq",
+    clear = "<space>cl",
+  },
+  -- If the highlight is on, you can change how it looks
+  -- For the available options, check nvim_set_hl
+  highlight = {
+    italic = true
+  },
+  ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+}
+
+require("ranger-nvim").setup({ replace_netrw = false })
+
+vim.api.nvim_set_keymap("n", "<leader>ef", "", {
+  noremap = true,
+  callback = function()
+    require("ranger-nvim").open(true)
+  end,
+})
+
+require("mason").setup()
