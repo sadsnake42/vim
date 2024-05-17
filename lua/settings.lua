@@ -110,6 +110,7 @@ require'nvim-treesitter.configs'.setup {
   highlight = { enable = true }
 }
 --vim.cmd([[colorscheme gruvbox]])
+vim.cmd("colorscheme citruszest")
 
 require("transparent").setup({
   groups = { -- table: default groups
@@ -508,7 +509,7 @@ require("neoai").setup({
     models = {
         {
             name = "openai",
-            model = "gpt-4",
+            model = "gpt-4-1106-preview",
             params = nil,
         },
     },
@@ -635,3 +636,7 @@ vim.api.nvim_set_keymap("n", "<leader>ef", "", {
 })
 
 require("mason").setup()
+
+require("pantran").setup{
+  default_engine = "deepl",
+}

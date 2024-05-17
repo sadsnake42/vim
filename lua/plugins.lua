@@ -11,6 +11,7 @@ return require('packer').startup(function(use)
 	use 'kvrohit/mellow.nvim'
 	use 'Tsuzat/NeoSolarized.nvim'
     use 'nyngwang/nvimgelion'
+    use "zootedb0t/citruszest.nvim" 
 
 	------------------=== Git ===----------------------
 	use 'yazgoo/unicodemoji'
@@ -76,7 +77,7 @@ return require('packer').startup(function(use)
     use 'samjwill/nvim-unception'
 
 	-- i3 ---
-	use 'mboughaba/i3config.vim'
+	--use 'mboughaba/i3config.vim'
 
 	-- Languages support ===-------------
 	use 'vim-scripts/L9'
@@ -100,7 +101,7 @@ return require('packer').startup(function(use)
 		    'mfussenegger/nvim-dap'
 		}
 	}
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
     use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
@@ -312,5 +313,7 @@ return require('packer').startup(function(use)
         "williamboman/mason.nvim"
     }
     --use 'TabbyML/vim-tabby'
+    use {'rr-/vim-hexdec'}
+    use "potamides/pantran.nvim"
 end)
 

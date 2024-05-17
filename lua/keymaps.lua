@@ -43,7 +43,7 @@ au("Filetype", { pattern = "rust", callback = function()
     map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
     map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
     map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
-    map('n', '<F8>',  ':Dispatch cargo nextest run --workspace<CR>',               default_opts)
+    map('n', '<F8>',  ':Dispatch cargo test run --workspace<CR>',               default_opts)
     map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
 end })
 
@@ -56,7 +56,7 @@ au("FileType", {
         map('n', '<F13>', ':AbortDispatch<CR>',                                        default_opts)
         map('n', '<F4>',  ':Dispatch cargo clippy --workspace --tests --examples<CR>', default_opts)
         map('n', '<F7>',  ':Dispatch cargo build --workspace<CR>',                     default_opts)
-        map('n', '<F8>',  ':Dispatch cargo nextest run --workspace<CR>',                           default_opts)
+        map('n', '<F8>',  ':Dispatch cargo test run --workspace<CR>',                           default_opts)
         map('n', '<F9>',  ':Dispatch cargo run<CR>',                                   default_opts)
 end })
 
